@@ -2,10 +2,11 @@
 
 1. Instalar NVM
   - en Windows: [https://github.com/coreybutler/nvm-windows](https://github.com/coreybutler/nvm-windows)
+  - en Linux: [https://github.com/nvm-sh/nvm](https://github.com/nvm-sh/nvm)
 
 2. Lanzar contenedor PostgreSQL `docker run -e POSTGRES_PASSWORD=foobarbaz -p 5432:5432 postgres:15.1-alpine`
 
-3. Nos ubicamos en la carpeta `api-node`
+3. Nos ubicamos en la carpeta `api-node` con una terminal **PowerShell**
 
 ```bash
 nvm install 19.4
