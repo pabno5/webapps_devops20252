@@ -147,6 +147,9 @@ EXPOSE 3000
 docker network create devops-network
 ```
 
+> [!IMPORTANT]  
+> Manten la tecla `Shift` al pegar comandos multilinea para que no sea ejecutado automaticamente y lo puedas editar
+
 2. Crear contenedor: base de datos
 
 ``` sh
