@@ -174,3 +174,6 @@ docker run -d `
   --restart unless-stopped `
   devops-api-node  
 ```
+
+> [!TIP]  
+> `docker ps` para verificar contenedores en ejecución. `docker ps -a` para incluir contenedores apagados.
