@@ -52,10 +52,6 @@ COPY: Copia archivos desde la carpeta del proyecto a la imagen del contenedor.
 CMD: Provee un comando a ser ejecutado cuando inicie el contenedor.
 ```
 
-## Comando para construir contenedor
-
-`docker build -t devops-api-node:<VERSION> .`
-
 ## api-node
 
 1. Imagen básica
@@ -138,6 +134,13 @@ RUN npm ci --only=production
 COPY -chown=node:node ./src .
 EXPOSE 3000  
 ```
+
+## Comando para construir contenedor
+
+`docker build -t devops-api-node:<VERSION> .`
+
+> [!IMPORTANT]  
+> Revisa el nombre y version de tus imagenes creadas con el comando `docker images`
 
 ### Ejecutar contenedor
 
