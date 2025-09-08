@@ -49,4 +49,4 @@ CMD: Provee un comando a ser ejecutado cuando inicie el contenedor.
 
 ## Comando para construir contenedor
 
-docker build -f Dockerfile .
+`docker build .`
