@@ -38,6 +38,11 @@ En el archivo `Dockerfile` se definen los pasos para construir la imagen de Dock
 
 Al crear una imagen de docker puedes incluir un archivo `.dockerignore` para ignorar ciertos archivos (por ejemplo la carpeta local `node_modules`) para que no sean copiados a la imagen del contenedor, de esa manera evitamos conflictos e incompatibilidades entre instalaciones del contenedor.
 
+```
+node_modules
+.npm  
+```
+
 ## Comandos generales en un Dockerfile
 
 ```
