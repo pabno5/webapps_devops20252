@@ -152,7 +152,7 @@ docker network create devops-network
 
 2. Crear contenedor: base de datos
 
-``` sh
+``` bash
 docker run -d `
   --name devops-postgres `
   --network devops-network `
@@ -165,7 +165,7 @@ docker run -d `
 
 3. Crear contenedor: api-node
 
-```
+``` bash
 docker run -d `
   --name contenedor-devops-api-node `
   --network devops-network `
