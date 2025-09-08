@@ -24,10 +24,6 @@ npm run dev
 
 Un Dockerfile es un archivo de texto que contiene todos los comandos para crear una imagen de contenedor, es como una receta para la aplicación.
 
-## .dockerignore
-
-Al crear una imagen de docker puedes incluir un archivo `.dockerignore` para ignorar ciertos archivos (por ejemplo la carpeta local `node_modules`) para que no sean copiados a la imagen del contenedor, de esa manera evitamos conflictos e incompatibilidades entre instalaciones del contenedor.
-
 ## Dockerfile
 
 En el archivo `Dockerfile` se definen los pasos para construir la imagen de Docker. Para construir y ejecutar las aplicaciones de esta sesión se definen los siguientes pasos:
@@ -37,6 +33,10 @@ En el archivo `Dockerfile` se definen los pasos para construir la imagen de Dock
 3. Instalar dependencias del proyecto o aplicación
 4. Configurar entorno de ejecución
 5. Correr la aplicación.
+
+## .dockerignore
+
+Al crear una imagen de docker puedes incluir un archivo `.dockerignore` para ignorar ciertos archivos (por ejemplo la carpeta local `node_modules`) para que no sean copiados a la imagen del contenedor, de esa manera evitamos conflictos e incompatibilidades entre instalaciones del contenedor.
 
 ## Comandos generales en un Dockerfile
 
@@ -49,4 +49,120 @@ CMD: Provee un comando a ser ejecutado cuando inicie el contenedor.
 
 ## Comando para construir contenedor
 
-`docker build .`
+`docker build -t devops-api-node:<VERSION> .`
+
+## api-node
+
+1. Imagen básica
+
+``` docker
+# Especificamos sis. operativo y dependencias a partir de una imagen ya hecha (node)
+FROM node
+
+# Copiamos el contenido del proyecto a la imagen Docker
+COPY . .
+
+# Ejecutamos instalación de dependencias al construir la imagen
+RUN npm install
+
+# Ejecutamos proyecto al inciar el contenedor
+CMD [ "npm", "run", "dev" ]
+```
+
+[https://hub.docker.com/_/node](https://hub.docker.com/_/node)
+
+2. Traer una versión especifica para reproducibilidad
+
+``` docker
+# FROM node  
+FROM node:24-alpine3.21
+```
+
+3. Copiar solo lo que necesitamos en el momento
+
+``` docker
+# COPY . .  
+COPY package*.json ./
+
+RUN npm install
+
+COPY ./src .
+```
+
+4. Definir carpeta de ejecución dentro de la imagen
+
+``` docker
+FROM node:24-alpine3.21
+WORKDIR /usr/src/app  
+```
+
+5. Ejecutar entorno de producción
+
+``` docker
+# CMD [ "npm", "run", "dev" ]
+CMD ["node", "index.js"]  
+```
+
+6. Definir usuario con permisos limitados
+
+``` docker
+RUN npm install
+USER node  
+
+# COPY ./src .
+COPY -chown=node:node ./src .
+```
+
+7. Variables de entorno dentro de la imagen
+
+``` docker
+# WORKDIR /usr/src/app  
+ENV NODE_ENV=production
+```
+
+8. Instalación ultra-optimizada de dependencias
+
+``` docker
+# RUN npm install
+RUN npm ci --only=production
+```
+
+9. Conectar puerto al exterior
+
+``` docker
+COPY -chown=node:node ./src .
+EXPOSE 3000  
+```
+
+### Ejecutar contenedor
+
+1. Crear red interna de contenedores
+
+```sh
+docker network create devops-network
+```
+
+2. Crear contenedor: base de datos
+
+``` sh
+docker run -d \
+  --name devops-postgres \
+  --network devops-network \
+  -e POSTGRES_PASSWORD=foobarbaz \
+  -v pgdata:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  --restart unless-stopped \
+  postgres:15.1-alpine
+```
+
+3. Crear contenedor: api-node
+
+```
+docker run -d \
+  --name contenedor-devops-api-node \
+  --network devops-network \
+  -e DATABASE_URL="postgres://postgres:foobarbaz@db:5432/postgres" \
+  -p 3000:3000 \
+  --restart unless-stopped \
+  devops-api-node  
+```
