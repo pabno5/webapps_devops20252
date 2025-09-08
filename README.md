@@ -166,7 +166,7 @@ docker run -d `
 docker run -d `
   --name contenedor-devops-api-node `
   --network devops-network `
-  -e DATABASE_URL="postgres://postgres:foobarbaz@db:5432/postgres" `
+  -e DATABASE_URL="postgres://postgres:foobarbaz@devops-postgres:5432/postgres" `
   -p 3000:3000 `
   --restart unless-stopped `
   devops-api-node  
