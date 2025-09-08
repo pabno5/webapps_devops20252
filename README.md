@@ -125,14 +125,14 @@ COPY -chown=node:node ./src .
 ENV NODE_ENV=production
 ```
 
-8. Instalación ultra-optimizada de dependencias*
+8. Instalación ultra-optimizada de dependencias
 
 ``` docker
 # RUN npm install
 RUN npm ci --only=production
 ```
 
-9. Conectar puerto al exterior
+9. Conectar puerto al exterior*
 
 ``` docker
 COPY -chown=node:node ./src .
