@@ -76,7 +76,7 @@ CMD [ "npm", "run", "dev" ]
 
 [https://hub.docker.com/_/node](https://hub.docker.com/_/node)
 
-2. Traer una versión especifica para reproducibilidad
+2. Traer una versión especifica para reproducibilidad*
 
 ``` docker
 # FROM node  
@@ -125,7 +125,7 @@ COPY -chown=node:node ./src .
 ENV NODE_ENV=production
 ```
 
-8. Instalación ultra-optimizada de dependencias
+8. Instalación ultra-optimizada de dependencias*
 
 ``` docker
 # RUN npm install
