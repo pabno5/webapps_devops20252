@@ -150,24 +150,24 @@ docker network create devops-network
 2. Crear contenedor: base de datos
 
 ``` sh
-docker run -d \
-  --name devops-postgres \
-  --network devops-network \
-  -e POSTGRES_PASSWORD=foobarbaz \
-  -v pgdata:/var/lib/postgresql/data \
-  -p 5432:5432 \
-  --restart unless-stopped \
+docker run -d `
+  --name devops-postgres `
+  --network devops-network `
+  -e POSTGRES_PASSWORD=foobarbaz `
+  -v pgdata:/var/lib/postgresql/data `
+  -p 5432:5432 `
+  --restart unless-stopped `
   postgres:15.1-alpine
 ```
 
 3. Crear contenedor: api-node
 
 ```
-docker run -d \
-  --name contenedor-devops-api-node \
-  --network devops-network \
-  -e DATABASE_URL="postgres://postgres:foobarbaz@db:5432/postgres" \
-  -p 3000:3000 \
-  --restart unless-stopped \
+docker run -d `
+  --name contenedor-devops-api-node `
+  --network devops-network `
+  -e DATABASE_URL="postgres://postgres:foobarbaz@db:5432/postgres" `
+  -p 3000:3000 `
+  --restart unless-stopped `
   devops-api-node  
 ```
