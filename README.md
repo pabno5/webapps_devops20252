@@ -137,7 +137,9 @@ EXPOSE 3000
 
 ## Comando para construir contenedor
 
-`docker build -t devops-api-node:<VERSION> .`
+La notación usada para definir la VERSION comienza en 0 y a medida que haces cambios al readme, puedes incrementar la versión de tu imagen Docker.
+
+`docker build -t devops-api-node:VERSION .`
 
 > [!IMPORTANT]  
 > Revisa el nombre y version de tus imagenes creadas con el comando `docker images`
