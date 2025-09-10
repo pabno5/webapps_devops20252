@@ -175,6 +175,7 @@ Ya teniendo los contenedores de `postgres` y `api-node`, construye las imagenes 
 Contenido del archivo `Dockerfile` en la carpeta `api-golang`:
 
 ```docker
+# ESTO ES EL CONTENIDO DEL ARCHIVO Dockerfile EN LA CARPETA api-golang
 FROM golang:1.19-bullseye AS build
 
 # Creamos usuario con privilegios minimos
@@ -236,6 +237,7 @@ Crear contenedor
 Contenido del archivo `Dockerfile` en la carpeta `client-react`:
 
 ```docker
+# ESTO ES EL CONTENIDO DEL ARCHIVO Dockerfile EN LA CARPETA client-react
 FROM node:19.4-bullseye AS build
 
 # Especificamos directorio de trabajo (si no todo quedaria en la / raiz lo cual es mala práctica)
