@@ -231,7 +231,7 @@ Crear contenedor
 
 ## client-react
 
-```ts
+```docker
 FROM node:19.4-bullseye AS build
 
 # Especificamos directorio de trabajo (si no todo quedaria en la / raiz lo cual es mala práctica)
