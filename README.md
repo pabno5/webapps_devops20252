@@ -157,28 +157,114 @@ docker network create devops-network
 
 2. Crear contenedor: base de datos
 
-``` bash
-docker run -d `
-  --name devops-postgres `
-  --network devops-network `
-  -e POSTGRES_PASSWORD=foobarbaz `
-  -v pgdata:/var/lib/postgresql/data `
-  -p 5432:5432 `
-  --restart unless-stopped `
-  postgres:15.1-alpine
-```
+`docker run -d --name devops-postgres --network devops-network -e POSTGRES_PASSWORD=foobarbaz -v pgdata:/var/lib/postgresql/data -p 5432:5432 --restart unless-stopped postgres:15.1-alpine`
 
 3. Crear contenedor: api-node
 
-``` bash
-docker run -d `
-  --name contenedor-devops-api-node `
-  --network devops-network `
-  -e DATABASE_URL="postgres://postgres:foobarbaz@devops-postgres:5432/postgres" `
-  -p 3000:3000 `
-  --restart unless-stopped `
-  devops-api-node  
-```
+`docker run -d --name contenedor-devops-api-node --network devops-network -e DATABASE_URL="postgres://postgres:foobarbaz@devops-postgres:5432/postgres" -p 3000:3000 --restart unless-stopped devops-api-node:0`
 
 > [!TIP]  
 > `docker ps` para verificar contenedores en ejecución. `docker ps -a` para incluir contenedores apagados.
+
+# Objetivos
+
+Ya teniendo los contenedores de `postgres` y `api-node`, construye las imagenes (y ejecuta los contenedores) para los proyectos `api-golang` y `client-react` a partir de los siguientes Dockerfile:
+
+## api-golang
+
+```docker
+FROM golang:1.19-bullseye AS build
+
+# Creamos usuario con privilegios minimos
+RUN useradd -u 1001 nonroot
+
+WORKDIR /app 
+
+# Copia solo los archivos requeridos para instalar (construcción de imagen más rapida)
+COPY go.mod go.sum ./
+
+# Instalación de dependencias en Go con cache para no repetir instalación de las dependencias existentes
+RUN --mount=type=cache,target=/go/pkg/mod \
+  --mount=type=cache,target=/root/.cache/go-build \
+  go mod download
+
+COPY . .
+
+# # Compila verificación
+RUN go build \
+  -ldflags="-linkmode external -extldflags -static" \
+  -tags netgo \
+  -o healthcheck \
+  ./healthcheck/healthcheck.go
+
+# Compilamos la aplicación durante creación de la imagen y no en la ejecución del contenedor
+RUN go build \
+  -ldflags="-linkmode external -extldflags -static" \
+  -tags netgo \
+  -o api-golang
+
+# Ya compilado creamos un entorno aislado que solo ejecute el binario compilado
+FROM scratch
+
+# Configuramos variable de entorno
+ENV GIN_MODE=release
+
+WORKDIR /
+
+# # Copia de archivos necesarios (contraseña de usuario, healthcheck, archivo compilado)
+COPY --from=build /etc/passwd /etc/passwd
+COPY --from=build /app/healthcheck/healthcheck healthcheck
+COPY --from=build /app/api-golang api-golang
+
+# Creamos usuario con privilegios minimos
+USER nonroot
+
+# Exponemos el puerto 8080 para comunicación
+EXPOSE 8080
+
+CMD ["/api-golang"]
+```
+
+Crear contenedor
+
+`docker run -d --name contenedor-devops-api-golang --network devops-network -e DATABASE_URL="postgres://postgres:foobarbaz@devops-postgres:5432/postgres" -p 8080:8080 --restart unless-stopped devops-api-golang:0`
+
+## client-react
+
+```ts
+FROM node:19.4-bullseye AS build
+
+# Especificamos directorio de trabajo (si no todo quedaria en la / raiz lo cual es mala práctica)
+WORKDIR /usr/src/app
+
+# Copiamos solo el archivo sobre declaración de dependencias necesarias, para optimizar construcción de la imagen
+COPY package*.json ./
+
+# Utilizamos funcionalidad de npm cache para agilizar construcción de imagen
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+  npm set cache /usr/src/app/.npm && \
+  npm install
+
+COPY . .
+
+RUN npm run build
+
+# Usamos una base diferente para desplegar frontend dentro del contenedor
+FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
+
+COPY --link nginx.conf /etc/nginx/conf.d/default.conf
+COPY --link --from=build usr/src/app/dist/ /usr/share/nginx/html
+
+EXPOSE 8080
+```
+
+Crear contenedor
+
+`docker run -d --name contenedor-devops-client-react --network devops-network -p 80:8080 --restart unless-stopped devops-client-react:0`
+
+## Resultado final
+
+En tu navegador dirigete a la ruta `localhost` y veras el resultado.
+
+![react page screenshot](screenshot.webp)
+
