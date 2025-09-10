@@ -172,6 +172,8 @@ Ya teniendo los contenedores de `postgres` y `api-node`, construye las imagenes 
 
 ## api-golang
 
+Contenido del archivo `Dockerfile` en la carpeta `api-golang`:
+
 ```docker
 FROM golang:1.19-bullseye AS build
 
@@ -230,6 +232,8 @@ Crear contenedor
 `docker run -d --name contenedor-devops-api-golang --network devops-network -e DATABASE_URL="postgres://postgres:foobarbaz@devops-postgres:5432/postgres" -p 8080:8080 --restart unless-stopped devops-api-golang:0`
 
 ## client-react
+
+Contenido del archivo `Dockerfile` en la carpeta `client-react`:
 
 ```docker
 FROM node:19.4-bullseye AS build
