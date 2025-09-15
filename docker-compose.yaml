@@ -51,10 +51,13 @@ services:
       context: ./client-react
       dockerfile: Dockerfile
     init: true
+    depends_on:
+      - api-node
+      - api-golang
     networks:
       - frontend
     ports:
-      - 80:8080
+      - 5173:5173
     restart: unless-stopped
 volumes:
   pgdata:
