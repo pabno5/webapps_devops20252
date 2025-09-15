@@ -1,3 +1,4 @@
+# ESTO ES EL CONTENIDO DEL ARCHIVO Dockerfile EN LA CARPETA client-react
 FROM node:19.4-bullseye AS build
 
 # Especificamos directorio de trabajo (si no todo quedaria en la / raiz lo cual es mala práctica)
@@ -8,8 +9,8 @@ COPY package*.json ./
 
 # Utilizamos funcionalidad de npm cache para agilizar construcción de imagen
 RUN --mount=type=cache,target=/usr/src/app/.npm \
- npm set cache /usr/src/app/.npm && \
- npm install
+  npm set cache /usr/src/app/.npm && \
+  npm install
 
 COPY . .
 
