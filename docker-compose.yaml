@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     init: true
     depends_on:
-      - db
+      - devops-postgres
     environment:
       - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
     networks:
@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
     init: true
     depends_on:
-      - db
+      - devops-postgres
     environment:
       - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
     networks:
@@ -52,8 +52,8 @@ services:
       dockerfile: Dockerfile
     init: true
     depends_on:
-      - api-node
-      - api-golang
+      - contenedor-devops-api-node
+      - contenedor-devops-api-golang
     networks:
       - frontend
     ports:
