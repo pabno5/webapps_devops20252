@@ -139,7 +139,7 @@ EXPOSE 3000
 
 La notación usada para definir la VERSION comienza en 0 y a medida que haces cambios al readme, puedes incrementar la versión de tu imagen Docker.
 
-`docker build -t devops-api-node:VERSION .`
+`docker build -t devops-api-node:0 .`
 
 > [!IMPORTANT]  
 > Revisa el nombre y version de tus imagenes creadas con el comando `docker images`
@@ -258,7 +258,7 @@ CMD ["npm", "run", "dev"]
 
 Crear contenedor
 
-`docker run -d --name contenedor-devops-client-react --network devops-network -v ./vite.config.js:/usr/src/app/vite.config.js -p 5173:5173 --restart unless-stopped devops-client-react:0`
+`docker run -d --name contenedor-devops-client-react --network devops-network -p 5173:5173 --restart unless-stopped devops-client-react:0`
 
 ## Resultado final
 

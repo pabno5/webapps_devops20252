@@ -7,4 +7,20 @@ dns.setDefaultResultOrder('verbatim');
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api/golang': {
+        target: 'http://contenedor-devops-api-golang:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/golang/, ''),
+        secure: false,
+      },
+      '/api/node': {
+        target: 'http://contenedor-devops-api-node:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/node/, ''),
+        secure: false,
+      },
+    },
+  },
 });
