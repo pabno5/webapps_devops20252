@@ -7,7 +7,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=foobarbaz
     networks:
-      - backend
+      - devops-network
     ports:
       - 5432:5432
     restart: unless-stopped
@@ -23,8 +23,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
     networks:
-      - frontend
-      - backend
+      - devops-network
     ports:
       - 3000:3000
     restart: unless-stopped
@@ -40,8 +39,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
     networks:
-      - frontend
-      - backend
+      - devops-network
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -58,12 +56,11 @@ services:
       - contenedor-devops-api-node
       - contenedor-devops-api-golang
     networks:
-      - frontend
+      - devops-network
     ports:
       - 5173:5173
     restart: unless-stopped
 volumes:
   pgdata:
 networks:
-  frontend:
-  backend:
+  devops-network:
