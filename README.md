@@ -253,24 +253,15 @@ RUN --mount=type=cache,target=/usr/src/app/.npm \
 
 COPY . .
 
-RUN npm run build
-
-# Usamos una base diferente para desplegar frontend dentro del contenedor
-FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
-
-COPY --link nginx.conf /etc/nginx/conf.d/default.conf
-COPY --link --from=build usr/src/app/dist/ /usr/share/nginx/html
-
-EXPOSE 8080
+CMD ["npm", "run", "dev"]
 ```
 
 Crear contenedor
 
-`docker run -d --name contenedor-devops-client-react --network devops-network -p 80:8080 --restart unless-stopped devops-client-react:0`
+`docker run -d --name contenedor-devops-client-react --network devops-network -v ./vite.config.js:/usr/src/app/vite.config.js -p 5173:5173 --restart unless-stopped devops-client-react:0`
 
 ## Resultado final
 
-En tu navegador dirigete a la ruta `localhost` y veras el resultado.
+En tu navegador dirigete a la ruta `localhost:5173` y veras el resultado.
 
 ![react page screenshot](screenshot.webp)
-
