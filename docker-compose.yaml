@@ -1,6 +1,6 @@
 services:
   devops-postgres:
-    container-name: devops-postgres
+    container_name: devops-postgres
     image: postgres:15.1-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -12,7 +12,7 @@ services:
       - 5432:5432
     restart: unless-stopped
   contenedor-devops-api-node:
-    container-name: contenedor-devops-api-node
+    container_name: contenedor-devops-api-node
     image: devops-api-node
     build:
       context: ./api-node
@@ -29,7 +29,7 @@ services:
       - 3000:3000
     restart: unless-stopped
   contenedor-devops-api-golang:
-    container-name: contenedor-devops-api-golang
+    container_name: contenedor-devops-api-golang
     image: devops-api-golang
     build:
       context: ./api-golang
