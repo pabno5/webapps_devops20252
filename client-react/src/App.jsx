@@ -37,8 +37,8 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <h1>Hey Team! 👋</h1>
-      <CurrentTime api="localhost:8080"/>
-      <CurrentTime api="localhost:3000"/>
+      <CurrentTime api="http://localhost:8080"/>
+      <CurrentTime api="http://localhost:3000"/>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
