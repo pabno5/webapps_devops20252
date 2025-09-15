@@ -21,7 +21,7 @@ services:
     depends_on:
       - devops-postgres
     environment:
-      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+      - DATABASE_URL=postgres://postgres:foobarbaz@devops-postgres:5432/postgres
     networks:
       - devops-network
     ports:
@@ -37,16 +37,13 @@ services:
     depends_on:
       - devops-postgres
     environment:
-      - DATABASE_URL=postgres://postgres:foobarbaz@db:5432/postgres
+      - DATABASE_URL=postgres://postgres:foobarbaz@devops-postgres:5432/postgres
     networks:
       - devops-network
     ports:
       - 8080:8080
     restart: unless-stopped
   client-react:
-    labels:
-      shipyard.primary-route: true
-      shipyard.route: '/'
     image: devops-client-react
     build:
       context: ./client-react
